@@ -65,7 +65,7 @@ function Home({ goals, toggleGoal, handleGoalResult, resultMessage, setResultMes
             {/* 今月の目標 */}
             <div className="border-l-4 border-orange-500 bg-orange-50 p-6 rounded-lg">
               <h2 className="text-xl font-bold text-orange-900 mb-3">📈 今月の目標</h2>
-              <p className="text-gray-700 mb-4">{goals.month.title || '目標を設定し���ください'}</p>
+              <p className="text-gray-700 mb-4">{goals.month.title || '目標を設定してください'}</p>
               <div className="flex gap-3">
                 <button
                   onClick={() => handleMarkGoal('month', true)}
