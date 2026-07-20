@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 function Home({ goals, toggleGoal, handleGoalResult, resultMessage, setResultMessage, onNavigate }) {
-  const [selectedGoal, setSelectedGoal] = useState(null);
-
   const handleMarkGoal = (type, isCompleted) => {
     toggleGoal(type);
     handleGoalResult(isCompleted);
-    setSelectedGoal(type);
   };
 
   return (
