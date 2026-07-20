@@ -28,8 +28,6 @@ function CalorieCounter({ onBack }) {
     }
   };
 
-  const totalCalories = foodLog.length;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4 sm:p-8">
       <div className="max-w-2xl mx-auto">
