@@ -12,8 +12,6 @@ function PenaltySetting({ penalties, addPenalty, onBack }) {
   };
 
   const handleRemove = (index) => {
-    const newPenalties = penalties.filter((_, i) => i !== index);
-    // Note: This needs state update in parent
     alert('削除機能は親コンポーネントで実装してください');
   };
 
