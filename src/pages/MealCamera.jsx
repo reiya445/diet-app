@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Icon from "../assets/Icon";
 
 
 function MealCamera({ onBack, onNext }) {
@@ -110,45 +111,51 @@ function MealCamera({ onBack, onNext }) {
 
   return (
 
-    <div className="min-h-screen bg-green-50 p-5">
+    <div className="page">
 
 
-      <button
-
-        onClick={onBack}
-
-        className="text-green-700 font-bold mb-5"
-
-      >
-
-        ← 戻る
-
-      </button>
+      <div className="container">
 
 
+        <button
 
-      <div className="bg-white rounded-3xl shadow-lg p-6">
+          onClick={onBack}
 
+          className="btn-back"
 
-        <h1 className="text-3xl font-bold text-center text-green-700">
+        >
 
-          🍽️ 食事AI解析
+          戻る
 
-        </h1>
-
-
-        <p className="text-center text-gray-500 mt-2 mb-6">
-
-          食事写真からカロリーを分析します
-
-        </p>
+        </button>
 
 
 
-        <label className="block cursor-pointer">
+        <div className="card">
 
 
-          <div className="border-2 border-dashed border-green-300 rounded-2xl p-5 text-center">
+          <div className="page-head" style={{ "--accent": "var(--amber)" }}>
+
+            <Icon name="spark" size={22} />
+
+            <h1 className="title-page">
+
+              食事AI解析
+
+            </h1>
+
+          </div>
+
+
+          <p className="page-subtitle">
+
+            写真を1枚。カロリーは全部バレます。
+
+          </p>
+
+
+
+          <label className="dropzone">
 
 
             {image ? (
@@ -159,7 +166,7 @@ function MealCamera({ onBack, onNext }) {
 
                 alt="preview"
 
-                className="rounded-xl w-full"
+                className="preview"
 
               />
 
@@ -167,67 +174,71 @@ function MealCamera({ onBack, onNext }) {
 
               <>
 
-              <div className="text-5xl">
-
-                📷
-
-              </div>
+              <Icon name="camera" size={34} strokeWidth={1.4} />
 
 
-              <p className="mt-3 text-gray-500">
+              <strong>
 
                 写真を選択
 
-              </p>
+              </strong>
+
+
+              <span>
+
+                タップして食事の画像をアップロード
+
+              </span>
 
               </>
 
             )}
 
 
-          </div>
+            <input
+
+              type="file"
+
+              accept="image/*"
+
+              onChange={handleImageChange}
+
+              className="is-hidden"
+
+            />
 
 
-          <input
-
-            type="file"
-
-            accept="image/*"
-
-            onChange={handleImageChange}
-
-            className="hidden"
-
-          />
-
-
-        </label>
+          </label>
 
 
 
 
+          <button
 
-        <button
+            onClick={handleAnalyze}
 
-          onClick={handleAnalyze}
+            disabled={loading}
 
-          disabled={loading}
+            className="btn btn--amber spacer-top"
 
-          className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl text-xl font-bold shadow-md"
+          >
 
-        >
+            <Icon name="spark" size={16} strokeWidth={2} />
 
-          {loading
+            {loading
 
-            ? "🤖 AI解析中..."
+              ? "AI解析中..."
 
-            : "🤖 AIで解析する"
+              : "AIで解析する"
 
-          }
+            }
 
 
-        </button>
+          </button>
 
+
+
+        </div>
 
 
       </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import Icon from "../assets/Icon";
 
 
 function MealResult({ analysis, onBack }) {
@@ -28,18 +29,26 @@ function MealResult({ analysis, onBack }) {
 
     return (
 
-      <div className="p-6">
+      <div className="page">
 
-        <p>
-          解析結果を読み込めませんでした
-        </p>
+        <div className="container">
+
+          <div className="card">
+
+            <p className="empty-state">
+              解析結果を読み込めませんでした
+            </p>
 
 
-        <button onClick={onBack}>
+            <button onClick={onBack} className="btn btn--ghost spacer-top">
 
-          戻る
+              戻る
 
-        </button>
+            </button>
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -52,184 +61,204 @@ function MealResult({ analysis, onBack }) {
 
   return (
 
-    <div className="min-h-screen bg-green-50 p-5">
+    <div className="page">
 
 
-      <button
-
-        onClick={onBack}
-
-        className="text-green-700 font-bold mb-5"
-
-      >
-
-        ← 戻る
-
-      </button>
+      <div className="container">
 
 
+        <button
 
+          onClick={onBack}
 
-      <div className="bg-white rounded-3xl shadow-lg p-6">
+          className="btn-back"
 
+        >
 
-        <h1 className="text-3xl font-bold text-center text-green-700 mb-8">
+          戻る
 
-          🤖 AI解析結果
-
-        </h1>
+        </button>
 
 
 
 
-        <div className="bg-green-100 rounded-2xl p-5 mb-5">
+        <div className="card">
 
 
-          <h2 className="font-bold text-lg">
+          <div className="page-head" style={{ "--accent": "var(--amber)" }}>
 
-            🍛 料理
+            <Icon name="spark" size={22} />
 
-          </h2>
+            <h1 className="title-page">
+
+              解析結果
+
+            </h1>
+
+          </div>
 
 
-          <p className="text-2xl font-bold mt-2">
+          <p className="page-subtitle">
 
-            {data.dish}
+            言い訳のきかない数字です。
 
           </p>
 
 
-        </div>
 
 
+          <div className="calorie">
 
 
+            <h2>
 
-        <div className="bg-blue-50 rounded-2xl p-5 mb-5">
+              <Icon name="flame" size={14} strokeWidth={2.2} />
 
+              推定カロリー
 
-          <h2 className="font-bold text-lg mb-3">
-
-            🥕 食材
-
-          </h2>
+            </h2>
 
 
-          <div className="space-y-2">
+            <p className="stat-number">
 
+              {data.calories}
 
-          {data.ingredients.map((item,index)=>(
+              <span>
 
-            <div
-
-              key={index}
-
-              className="bg-white rounded-xl p-3 shadow-sm"
-
-            >
-
-              {item.name}
-
-              <span className="float-right font-bold">
-
-                {item.amount}
+                kcal
 
               </span>
 
-
-            </div>
-
-          ))}
+            </p>
 
 
           </div>
 
 
+
+
+          <div className="stat">
+
+
+            <h2>
+
+              料理
+
+            </h2>
+
+
+            <p className="stat-value">
+
+              {data.dish}
+
+            </p>
+
+
+          </div>
+
+
+
+
+
+          <div className="stat">
+
+
+            <h2>
+
+              食材
+
+            </h2>
+
+
+            <div className="list">
+
+
+            {data.ingredients.map((item,index)=>(
+
+              <div
+
+                key={index}
+
+                className="list-row"
+
+              >
+
+                <span>{item.name}</span>
+
+                <span className="list-amount">
+
+                  {item.amount}
+
+                </span>
+
+
+              </div>
+
+            ))}
+
+
+            </div>
+
+
+          </div>
+
+
+
+
+
+          <div className="stat">
+
+
+            <h2>
+
+              AIアドバイス
+
+            </h2>
+
+
+            <p className="stat-body">
+
+              {data.advice}
+
+            </p>
+
+
+            <hr className="divider"/>
+
+
+            <h3>
+
+              明日のおすすめ
+
+            </h3>
+
+
+            <p className="stat-body">
+
+              {data.tomorrow_recipe}
+
+            </p>
+
+
+          </div>
+
+
+
+
+
+          <button
+
+            className="btn spacer-top"
+
+          >
+
+            保存する
+
+          </button>
+
+
+
         </div>
-
-
-
-
-
-        <div className="bg-orange-100 rounded-2xl p-5 mb-5 text-center">
-
-
-          <h2 className="font-bold">
-
-            🔥 推定カロリー
-
-          </h2>
-
-
-          <p className="text-5xl font-bold text-red-600 mt-2">
-
-            {data.calories}
-
-            <span className="text-2xl">
-
-              kcal
-
-            </span>
-
-          </p>
-
-
-        </div>
-
-
-
-
-
-        <div className="bg-purple-50 rounded-2xl p-5 mb-6">
-
-
-          <h2 className="font-bold text-lg mb-3">
-
-            💡 AIアドバイス
-
-          </h2>
-
-
-          <p className="leading-relaxed">
-
-            {data.advice}
-
-          </p>
-
-
-          <hr className="my-4"/>
-
-
-          <h3 className="font-bold">
-
-            🍳 明日のおすすめ
-
-          </h3>
-
-
-          <p className="mt-2">
-
-            {data.tomorrow_recipe}
-
-          </p>
-
-
-        </div>
-
-
-
-
-
-        <button
-
-          className="w-full bg-green-600 text-white py-4 rounded-2xl text-xl font-bold"
-
-        >
-
-          💾 保存する
-
-        </button>
-
 
 
       </div>

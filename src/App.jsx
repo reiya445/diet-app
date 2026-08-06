@@ -19,6 +19,8 @@ function App() {
   const [penalties, setPenalties] = useState([]);
   const [rewards, setRewards] = useState([]);
   const [resultMessage, setResultMessage] = useState('');
+  // 'reward' | 'penalty' | null — 判定パネルの配色を出し分けるために持つ
+  const [resultKind, setResultKind] = useState(null);
   const [analysis, setAnalysis] = useState(null);
 
   // ローカルストレージから데이터를 읽み込む
@@ -62,11 +64,18 @@ function App() {
   const handleGoalResult = (isCompleted) => {
     if (isCompleted) {
       const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
-      setResultMessage(`🎉 ご褒美: ${randomReward || 'ご褒美を設定してください'}`);
+      setResultKind('reward');
+      setResultMessage(`ご褒美 — ${randomReward || 'ご褒美を設定してください'}`);
     } else {
       const randomPenalty = penalties[Math.floor(Math.random() * penalties.length)];
-      setResultMessage(`⚠️ 罰ゲーム: ${randomPenalty || '罰ゲームを設定してください'}`);
+      setResultKind('penalty');
+      setResultMessage(`罰ゲーム — ${randomPenalty || '罰ゲームを設定してください'}`);
     }
+  };
+
+  const clearResult = () => {
+    setResultMessage('');
+    setResultKind(null);
   };
 
   const addPenalty = (penalty) => {
@@ -85,8 +94,10 @@ return (
   <Home
     goals={goals}
     toggleGoal={toggleGoal}
-    onGoalResult={handleGoalResult}
+    handleGoalResult={handleGoalResult}
     resultMessage={resultMessage}
+    resultKind={resultKind}
+    clearResult={clearResult}
 
     onNavigate={(page) => {
       setCurrentPage(page);
@@ -175,12 +186,12 @@ return (
 
 );
       default:
-        return <Home goals={goals} toggleGoal={toggleGoal} handleGoalResult={handleGoalResult} resultMessage={resultMessage} setResultMessage={setResultMessage} onNavigate={setCurrentPage} />;
+        return <Home goals={goals} toggleGoal={toggleGoal} handleGoalResult={handleGoalResult} resultMessage={resultMessage} resultKind={resultKind} clearResult={clearResult} onNavigate={setCurrentPage} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="app-root">
       {renderPage()}
     </div>
   );

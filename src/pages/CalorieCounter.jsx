@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Icon from '../assets/Icon';
 
 function CalorieCounter({ onBack, onNext }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -36,69 +37,66 @@ function CalorieCounter({ onBack, onNext }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4 sm:p-8">
-      <div className="max-w-2xl mx-auto">
+    <div className="page">
+      <div className="container">
         <button
           onClick={onBack}
-          className="mb-6 text-purple-600 hover:text-purple-800 font-bold text-lg"
+          className="btn-back"
         >
-          ← 戻る
+          戻る
         </button>
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-purple-900 mb-8 text-center">
-            📸 カロリー計算
-          </h1>
+        <div className="card">
+          <div className="page-head" style={{ '--accent': 'var(--amber)' }}>
+            <Icon name="camera" size={22} />
+            <h1 className="title-page">カロリー計算</h1>
+          </div>
+          <p className="page-subtitle">
+            食べたものを残らず記録します。ごまかしは罰ゲームで返ってきます。
+          </p>
 
-          <div className="bg-yellow-50 border-2 border-yellow-400 p-4 rounded-lg mb-8">
-            <p className="text-yellow-900 font-semibold">
-              📝 AIによる食事分析機能を追加予定です。
-            </p>
-            <p className="text-yellow-800 text-sm mt-2">
-              現在は手動入力も利用できます。
-            </p>
+          <div className="notice">
+            <Icon name="penalty" size={17} strokeWidth={2} />
+            <div>
+              <p>AIによる食事分析機能を追加予定です。</p>
+              <p>現在は手動入力も利用できます。</p>
+            </div>
           </div>
 
           {/* 写真アップロード */}
-          <div className="mb-8">
-            <label className="block text-lg font-bold text-gray-700 mb-4">
-              📷 食事の写真をアップロード
-            </label>
+          <div className="field">
+            <label className="field-label">食事の写真をアップロード</label>
 
             <input
               type="file"
               accept="image/*"
               onChange={handleImageUpload}
-              className="w-full p-4 border-2 border-dashed border-purple-300 rounded-lg"
+              className="file-input"
             />
           </div>
 
           {/* 写真プレビュー */}
           {selectedImage && (
-            <div className="mb-8">
-              <p className="text-lg font-bold text-gray-700 mb-3">
-                アップロード画像
-              </p>
+            <div className="field">
+              <p className="field-label">アップロード画像</p>
 
               <img
                 src={selectedImage}
                 alt="food"
-                className="w-full rounded-lg shadow-md max-h-64 object-cover"
+                className="preview"
               />
             </div>
           )}
 
           {/* 手動入力 */}
-          <div className="mb-8">
-            <label className="block text-lg font-bold text-gray-700 mb-4">
-              📝 手動でカロリー情報を入力
-            </label>
+          <div className="field">
+            <label className="field-label">手動でカロリー情報を入力</label>
 
             <textarea
               value={manualCalories}
               onChange={(e) => setManualCalories(e.target.value)}
               placeholder="例: 朝食 - オムライス 800kcal"
-              className="w-full p-4 border-2 border-purple-300 rounded-lg focus:border-purple-600 focus:outline-none text-lg"
+              className="textarea"
               rows="3"
             />
           </div>
@@ -106,43 +104,43 @@ function CalorieCounter({ onBack, onNext }) {
           {/* 手動記録 */}
           <button
             onClick={handleAddManualCalories}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 mb-4"
+            className="btn btn--ghost"
           >
-            ➕ 記録を追加
+            <Icon name="note" size={16} strokeWidth={2} />
+            記録を追加
           </button>
 
           {/* AI分析画面へ */}
           <button
             onClick={onNext}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 mb-8"
+            className="btn spacer-top"
           >
-            🤖 AIで食事を分析する
+            <Icon name="spark" size={16} strokeWidth={2} />
+            AIで食事を分析する
           </button>
 
           {/* 食事ログ */}
-          <div>
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              📋 食事ログ ({foodLog.length})
+          <div className="section">
+            <h2 className="section-title">
+              食事ログ
+              <span className="count-pill">{foodLog.length}</span>
             </h2>
 
             {foodLog.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">
-                まだ食事が記録されていません
-              </p>
+              <p className="empty-state">まだ食事が記録されていません</p>
             ) : (
-              <div className="space-y-3">
+              <div className="list">
                 {foodLog.map((log, index) => (
                   <div
                     key={index}
-                    className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-600"
+                    className="list-row list-row--stacked"
                   >
-                    <p className="text-gray-800 font-semibold">
-                      {index + 1}. {log.content}
+                    <p>
+                      <span className="list-index">{index + 1}</span>
+                      {log.content}
                     </p>
 
-                    <p className="text-gray-500 text-sm mt-1">
-                      📅 {log.timestamp}
-                    </p>
+                    <p className="caption">{log.timestamp}</p>
                   </div>
                 ))}
               </div>
