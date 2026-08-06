@@ -217,9 +217,10 @@ function MealResult({ analysis, onBack }) {
 
 
             <p className="stat-body">
+              <p className="stat-body" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
 
               {data.advice}
-
+              </p>
             </p>
 
 
@@ -234,8 +235,11 @@ function MealResult({ analysis, onBack }) {
 
 
             <p className="stat-body">
+              <p className="stat-body" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
 
               {data.tomorrow_recipe}
+              </p>
+              
 
             </p>
 
