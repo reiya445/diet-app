@@ -4,6 +4,10 @@ import GoalSetting from './pages/GoalSetting';
 import PenaltySetting from './pages/PenaltySetting';
 import RewardSetting from './pages/RewardSetting';
 import CalorieCounter from './pages/CalorieCounter';
+import MealCamera from './pages/MealCamera';
+import MealResult from './pages/MealResult';
+
+
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -15,6 +19,7 @@ function App() {
   const [penalties, setPenalties] = useState([]);
   const [rewards, setRewards] = useState([]);
   const [resultMessage, setResultMessage] = useState('');
+  const [analysis, setAnalysis] = useState(null);
 
   // ローカルストレージから데이터를 읽み込む
   useEffect(() => {
@@ -75,16 +80,20 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return (
-          <Home
-            goals={goals}
-            toggleGoal={toggleGoal}
-            handleGoalResult={handleGoalResult}
-            resultMessage={resultMessage}
-            setResultMessage={setResultMessage}
-            onNavigate={setCurrentPage}
-          />
-        );
+
+return (
+  <Home
+    goals={goals}
+    toggleGoal={toggleGoal}
+    onGoalResult={handleGoalResult}
+    resultMessage={resultMessage}
+
+    onNavigate={(page) => {
+      setCurrentPage(page);
+    }}
+
+  />
+);
       case 'goalSetting':
         return (
           <GoalSetting
@@ -113,8 +122,58 @@ function App() {
         return (
           <CalorieCounter
             onBack={() => setCurrentPage('home')}
+            onNext={() => setCurrentPage("mealCamera")}
           />
         );
+      case "mealCamera":
+
+return (
+
+  <MealCamera
+
+    onBack={() =>
+      setCurrentPage("calorieCounter")
+    }
+
+
+    onNext={(data)=>{
+
+
+      console.log(
+        "App受信:",
+        data
+      );
+
+
+      setAnalysis(data);
+
+
+      setCurrentPage(
+        "mealResult"
+      );
+
+
+    }}
+
+  />
+
+);
+
+case "mealResult":
+
+return (
+
+  <MealResult
+
+    analysis={analysis}
+
+    onBack={() =>
+      setCurrentPage("mealCamera")
+    }
+
+  />
+
+);
       default:
         return <Home goals={goals} toggleGoal={toggleGoal} handleGoalResult={handleGoalResult} resultMessage={resultMessage} setResultMessage={setResultMessage} onNavigate={setCurrentPage} />;
     }
