@@ -1,24 +1,35 @@
 import React, { useState } from 'react';
 import Icon from '../assets/Icon';
 
-function PenaltySetting({ penalties, addPenalty, onBack }) {
+function PenaltySetting({
+  penalties,
+  addPenalty,
+  deletePenalty,
+  onBack
+}) {
   const [penaltyText, setPenaltyText] = useState('');
 
   const handleAdd = () => {
-    if (penaltyText.trim()) {
-      addPenalty(penaltyText);
-      setPenaltyText('');
-      alert('罰ゲームを追加しました！');
-    }
+    if (!penaltyText.trim()) return;
+
+    addPenalty(penaltyText.trim());
+    setPenaltyText('');
   };
 
-  const handleRemove = (index) => {
-    alert('削除機能は親コンポーネントで実装してください');
+  const handleDelete = (index) => {
+    const confirmed = window.confirm(
+      'この罰ゲームを削除しますか？'
+    );
+
+    if (confirmed) {
+      deletePenalty(index);
+    }
   };
 
   return (
     <div className="page">
       <div className="container">
+
         <button
           onClick={onBack}
           className="btn-back"
@@ -27,62 +38,96 @@ function PenaltySetting({ penalties, addPenalty, onBack }) {
         </button>
 
         <div className="card">
-          <div className="page-head" style={{ '--accent': 'var(--red)' }}>
+
+          <div className="page-head">
             <Icon name="penalty" size={22} />
-            <h1 className="title-page">罰ゲーム</h1>
+            <h1 className="title-page">
+              罰ゲームを設定
+            </h1>
           </div>
+
           <p className="page-subtitle">
-            目標を落としたとき、この中からランダムで1つ引かされます。
+            目標を達成できなかったときの罰ゲームを設定します。
           </p>
 
-          {/* 罰ゲーム入力 */}
+          {/* 罰ゲーム一覧 */}
           <div className="field">
-            <label className="field-label">罰ゲームの内容</label>
-            <textarea
-              value={penaltyText}
-              onChange={e => setPenaltyText(e.target.value)}
-              placeholder="例: スクワット30回、冷たいシャワーを浴びる、好物の食べ物を1週間禁止"
-              className="textarea textarea--danger"
-              rows="4"
-            />
+
+            <label className="field-label">
+              設定中の罰ゲーム
+            </label>
+
+            {penalties.length === 0 ? (
+              <div className="stat">
+                <p className="stat-value">
+                  まだ罰ゲームが設定されていません
+                </p>
+              </div>
+            ) : (
+              <div className="penalty-list">
+
+                {penalties.map((penalty, index) => (
+                  <div
+                    key={`${penalty}-${index}`}
+                    className="penalty-item"
+                  >
+
+                    <span className="penalty-text">
+                      {penalty}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleDelete(index)
+                      }
+                      className="delete-button"
+                      aria-label={`${penalty}を削除`}
+                      title="削除"
+                    >
+                      🗑️
+                    </button>
+
+                  </div>
+                ))}
+
+              </div>
+            )}
+
           </div>
 
-          {/* 追加ボタン */}
+          {/* 新しい罰ゲーム */}
+          <div className="field spacer-top">
+
+            <label className="field-label">
+              新しい罰ゲーム
+            </label>
+
+            <textarea
+              value={penaltyText}
+              onChange={(e) =>
+                setPenaltyText(e.target.value)
+              }
+              placeholder="例：腕立て伏せ20回"
+              className="textarea"
+              rows="3"
+            />
+
+          </div>
+
           <button
             onClick={handleAdd}
-            className="btn btn--red-solid"
+            className="btn"
+            disabled={!penaltyText.trim()}
           >
-            <Icon name="penalty" size={16} strokeWidth={2.2} />
+            <Icon
+              name="check"
+              size={16}
+              strokeWidth={2.4}
+            />
             罰ゲームを追加
           </button>
 
-          {/* 登録済み罰ゲーム一覧 */}
-          <div className="section">
-            <h2 className="section-title">
-              登録済み
-              <span className="count-pill">{penalties.length}</span>
-            </h2>
-            {penalties.length === 0 ? (
-              <p className="empty-state">
-                まだ罰ゲームがありません。厳しめに設定するほど効きます。
-              </p>
-            ) : (
-              <div className="list">
-                {penalties.map((penalty, index) => (
-                  <div key={index} className="list-row">
-                    <p><span className="list-index">{index + 1}</span>{penalty}</p>
-                    <button
-                      onClick={() => handleRemove(index)}
-                      className="btn-inline"
-                      aria-label="削除"
-                    >
-                      <Icon name="trash" size={16} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>
