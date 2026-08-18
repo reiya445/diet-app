@@ -152,43 +152,24 @@ Gemini APIを利用して、食事写真から自動解析を行います。
 必要環境
 Node.js 18以上
 npm
-フロントエンド起動
+アプリ起動（Netlify CLI）
 git clone https://github.com/reiya445/diet-app.git
 
 cd diet-app
 
 npm install
 
-npm start
+netlify dev
 
 ブラウザ：
 
-http://localhost:3000
-AIサーバー起動
+http://localhost:8888
 
-serverフォルダへ移動します。
-
-cd server
-
-npm install
-
-npm start
-
-サーバー：
-
-http://localhost:5010
+フロントエンドとAI解析API（Netlify Functions）が1つのコマンドでまとめて起動します。
 🔑 Gemini API設定
 
-serverフォルダに .env を作成してください。
-
-GEMINI_API_KEY=あなたのGemini APIキー
-PORT=5010
-
-APIキー取得：
-
-Google AI Studio
-
-https://aistudio.google.com/
+AI解析はNetlifyにデプロイすると自動で有効になるAI Gatewayを利用しており、
+Gemini APIキーを自分で発行・設定する必要はありません。
 
 📁 ファイル構成
 diet-app/
@@ -206,13 +187,13 @@ diet-app/
 │       ├── PenaltySetting.jsx
 │       ├── RewardSetting.jsx
 │       ├── CalorieCounter.jsx
+│       ├── CalorieHistory.jsx
 │       ├── MealCamera.jsx
 │       └── MealResult.jsx
 │
-├── server/
-│   ├── server.js
-│   ├── package.json
-│   └── .env
+├── netlify/
+│   └── functions/
+│       └── analyze.mts
 │
 ├── package.json
 ├── .gitignore
@@ -223,11 +204,10 @@ diet-app/
 UI	Tailwind CSS 3
 状態管理	React Hooks
 データ保存	LocalStorage
-バックエンド	Node.js
-APIサーバー	Express
-AI解析	Google Gemini API
-言語	JavaScript(JSX)
-開発環境	Create React App
+バックエンド	Netlify Functions
+AI解析	Google Gemini（Netlify AI Gateway経由）
+言語	JavaScript(JSX) / TypeScript(Functions)
+開発環境	Create React App + Netlify CLI
 パッケージ管理	npm
 💾 データ保存
 
@@ -320,14 +300,13 @@ npm cache clean --force
 
 npm install
 ポートが使用されている場合
-PORT=3001 npm start
+netlify dev --port 8889
 Gemini APIエラーの場合
 
 確認事項：
 
-APIキーが正しいか
-.env の場所がserverフォルダ内か
-サーバーを再起動したか
+Netlifyへのデプロイが完了しているか（AI Gatewayは本番デプロイ後に有効化されます）
+画像サイズが大きすぎないか
 📄 License
 
 MIT License
