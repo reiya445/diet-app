@@ -51,7 +51,7 @@ function MealCamera({ onBack, onNext }) {
 
       const response = await fetch(
 
-        "http://localhost:5001/analyze",
+        "http://localhost:5010/analyze",
 
         {
 
