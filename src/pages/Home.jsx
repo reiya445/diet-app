@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Icon from '../assets/Icon';
 
 function Home({ goals, toggleGoal, handleGoalResult, resultMessage, resultKind, clearResult, onNavigate }) {
-  const [selectedGoal, setSelectedGoal] = useState(null);
 
   const handleMarkGoal = (type, isCompleted) => {
     toggleGoal(type);
     handleGoalResult(isCompleted);
-    setSelectedGoal(type);
   };
 
   const periods = [
