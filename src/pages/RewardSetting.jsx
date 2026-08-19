@@ -1,74 +1,133 @@
 import React, { useState } from 'react';
+import Icon from '../assets/Icon';
 
-function RewardSetting({ rewards, addReward, onBack }) {
+function RewardSetting({
+  rewards,
+  addReward,
+  deleteReward,
+  onBack
+}) {
   const [rewardText, setRewardText] = useState('');
 
   const handleAdd = () => {
-    if (rewardText.trim()) {
-      addReward(rewardText);
-      setRewardText('');
-      alert('ご褒美を追加しました！');
+    if (!rewardText.trim()) return;
+
+    addReward(rewardText.trim());
+    setRewardText('');
+  };
+
+  const handleDelete = (index) => {
+    const confirmed = window.confirm(
+      'このご褒美を削除しますか？'
+    );
+
+    if (confirmed) {
+      deleteReward(index);
     }
   };
 
-  const handleRemove = (index) => {
-    alert('削除機能は親コンポーネントで実装してください');
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-4 sm:p-8">
-      <div className="max-w-2xl mx-auto">
+    <div className="page">
+      <div className="container">
+
         <button
           onClick={onBack}
-          className="mb-6 text-green-600 hover:text-green-800 font-bold text-lg"
+          className="btn-back"
         >
-          ← 戻る
+          戻る
         </button>
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-green-900 mb-8 text-center">🎁 ご褒美を設定する</h1>
+        <div className="card">
 
-          {/* ご褒美入力 */}
-          <div className="mb-8">
-            <label className="block text-lg font-bold text-gray-700 mb-4">ご褒美の内容</label>
-            <textarea
-              value={rewardText}
-              onChange={e => setRewardText(e.target.value)}
-              placeholder="例: 好きなケーキを食べる、好きなドラマを1時間見る、マッサージをする"
-              className="w-full p-4 border-2 border-green-300 rounded-lg focus:border-green-600 focus:outline-none text-lg"
-              rows="4"
-            />
+          <div className="page-head">
+            <Icon name="reward" size={22} />
+            <h1 className="title-page">
+              ご褒美を設定
+            </h1>
           </div>
 
-          {/* 追加ボタン */}
-          <button
-            onClick={handleAdd}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 mb-8"
-          >
-            ➕ ご褒美を追加
-          </button>
+          <p className="page-subtitle">
+            目標を達成したときのご褒美を設定します。
+          </p>
 
-          {/* 登録済みご褒美一覧 */}
-          <div>
-            <h2 className="text-xl font-bold text-gray-800 mb-4">登録済みのご褒美 ({rewards.length})</h2>
+          {/* ご褒美一覧 */}
+          <div className="field">
+
+            <label className="field-label">
+              設定中のご褒美
+            </label>
+
             {rewards.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">まだご褒美が登録されていません</p>
+              <div className="stat">
+                <p className="stat-value">
+                  まだご褒美が設定されていません
+                </p>
+              </div>
             ) : (
-              <div className="space-y-3">
+              <div className="reward-list">
+
                 {rewards.map((reward, index) => (
-                  <div key={index} className="bg-green-50 p-4 rounded-lg flex justify-between items-center">
-                    <p className="text-gray-800 font-semibold">{index + 1}. {reward}</p>
+                  <div
+                    key={`${reward}-${index}`}
+                    className="reward-item"
+                  >
+
+                    <span className="reward-text">
+                      {reward}
+                    </span>
+
                     <button
-                      onClick={() => handleRemove(index)}
-                      className="text-green-600 hover:text-green-800 font-bold"
+                      type="button"
+                      onClick={() =>
+                        handleDelete(index)
+                      }
+                      className="delete-button"
+                      aria-label={`${reward}を削除`}
+                      title="削除"
                     >
                       🗑️
                     </button>
+
                   </div>
                 ))}
+
               </div>
             )}
+
           </div>
+
+          {/* 新しいご褒美 */}
+          <div className="field spacer-top">
+
+            <label className="field-label">
+              新しいご褒美
+            </label>
+
+            <textarea
+              value={rewardText}
+              onChange={(e) =>
+                setRewardText(e.target.value)
+              }
+              placeholder="例：好きなスイーツを食べる"
+              className="textarea"
+              rows="3"
+            />
+
+          </div>
+
+          <button
+            onClick={handleAdd}
+            className="btn"
+            disabled={!rewardText.trim()}
+          >
+            <Icon
+              name="check"
+              size={16}
+              strokeWidth={2.4}
+            />
+            ご褒美を追加
+          </button>
+
         </div>
       </div>
     </div>
