@@ -100,8 +100,18 @@ app.post("/analyze", async (req, res) => {
     console.error("========== Gemini Error ==========");
     console.error(error);
 
+    // Sanitize errors returned to the client to avoid leaking internal plugin/ACL details
+    const rawMessage = (error && error.message) || String(error);
+    const isServiceUnavailable = (error && error.status === 503) || /503/.test(rawMessage);
+    const containsPluginCommand = /plugin:/i.test(rawMessage) || /dialog\|message/i.test(rawMessage);
+
+    let clientMessage = '解析中に外部サービスの制限が発生しました。しばらく待ってから再試行してください。';
+    if (!isServiceUnavailable && !containsPluginCommand) {
+      clientMessage = rawMessage;
+    }
+
     res.status(500).json({
-      error:error.message
+      error: clientMessage
     });
 
   }
