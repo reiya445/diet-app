@@ -51,8 +51,11 @@ function MealCamera({ onBack, onNext }) {
 
       const apiBase = (() => {
         const host = window.location.hostname;
-        // When shared via localtunnel, point to the public backend URL
-        if (host.includes('loca.lt')) return 'https://dietapp-backend-1787159722.loca.lt';
+        // If running on a loca.lt frontend, map to the matching backend subdomain
+        if (host.includes('loca.lt')) {
+          const backendHost = host.replace('frontend', 'backend');
+          return `${window.location.protocol}//${backendHost}`;
+        }
         return `${window.location.protocol}//${host}:5010`;
       })();
 
