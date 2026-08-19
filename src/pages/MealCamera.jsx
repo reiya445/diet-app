@@ -49,11 +49,14 @@ function MealCamera({ onBack, onNext }) {
     try {
 
 
-      const response = await fetch(
+      const apiBase = (() => {
+        const host = window.location.hostname;
+        // When shared via localtunnel, point to the public backend URL
+        if (host.includes('loca.lt')) return 'https://dietapp-backend-1787159722.loca.lt';
+        return `${window.location.protocol}//${host}:5010`;
+      })();
 
-        "http://localhost:5010/analyze",
-
-        {
+      const response = await fetch(`${apiBase}/analyze`, {
 
           method: "POST",
 
