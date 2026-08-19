@@ -49,6 +49,23 @@ function MealCamera({ onBack, onNext }) {
     try {
 
 
+      // compress large images in-browser to avoid upload timeouts
+      const compressImage = (dataUrl, maxWidth = 1024, quality = 0.8) => new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const ratio = Math.min(1, maxWidth / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * ratio);
+          canvas.height = Math.round(img.height * ratio);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const compressed = canvas.toDataURL('image/jpeg', quality);
+          resolve(compressed);
+        };
+        img.onerror = () => resolve(dataUrl);
+        img.src = dataUrl;
+      });
+
       const apiBase = (() => {
         const host = window.location.hostname;
         // If running on a loca.lt frontend, map to the matching backend subdomain
@@ -59,25 +76,15 @@ function MealCamera({ onBack, onNext }) {
         return `${window.location.protocol}//${host}:5010`;
       })();
 
+      const payloadImage = await compressImage(image, 1024, 0.8);
+
       const response = await fetch(`${apiBase}/analyze`, {
-
-          method: "POST",
-
-          headers: {
-
-            "Content-Type": "application/json",
-
-          },
-
-          body: JSON.stringify({
-
-            image
-
-          }),
-
-        }
-
-      );
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ image: payloadImage }),
+      });
 
 
 
