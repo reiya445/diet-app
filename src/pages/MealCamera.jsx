@@ -32,80 +32,55 @@ function MealCamera({ onBack, onNext }) {
 
 
   const handleAnalyze = async () => {
+  if (!image) {
+    alert("画像を選択してください");
+    return;
+  }
 
+  setLoading(true);
 
-    if (!image) {
+  try {
+    const response = await fetch(
+      "https://diet-api-4u60.onrender.com/analyze",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image,
+        }),
+      }
+    );
 
-      alert("画像を選択してください");
+    // HTTPエラーを確認
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("APIエラー:", response.status, errorText);
 
-      return;
-
+      throw new Error(
+        `APIエラー ${response.status}: ${errorText}`
+      );
     }
 
+    const data = await response.json();
 
-    setLoading(true);
+    console.log("Gemini結果:", data);
 
+    onNext(data);
 
-    try {
+  } catch (error) {
+    console.error("解析エラー:", error);
 
+    alert(
+      "AI解析に失敗しました。\n\n" +
+      error.message
+    );
 
-      const response = await fetch(
-
-        "https://diet-api-4u60.onrender.com/analyze",
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "Content-Type": "application/json",
-
-          },
-
-          body: JSON.stringify({
-
-            image
-
-          }),
-
-        }
-
-      );
-
-
-
-      const data = await response.json();
-
-
-      console.log(
-        "Gemini結果:",
-        data
-      );
-
-
-      onNext(data);
-
-
-
-    } catch(error) {
-
-
-      console.error(error);
-
-
-      alert(
-        "解析に失敗しました"
-      );
-
-
-    }
-
-
+  } finally {
     setLoading(false);
-
-
-  };
+  }
+};
 
 
 
