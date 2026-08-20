@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import Icon from '../assets/Icon';
 
+const rewardCandidates = [
+  '🎬 映画・動画を1本楽しむ',
+  '☕ カフェで好きな飲み物を楽しむ',
+  '🎮 趣味の時間を30分増やす',
+  '🍰 好きなスイーツを1つ楽しむ',
+  '🛍️ 500円以内で好きなものを買う',
+  '🎵 好きな音楽をゆっくり聴く',
+  '🛋️ 30分ゆっくりリラックスする',
+  '⭐ ポイントを獲得する'
+];
+
 function RewardSetting({
   rewards,
   addReward,
@@ -10,10 +21,28 @@ function RewardSetting({
   const [rewardText, setRewardText] = useState('');
 
   const handleAdd = () => {
-    if (!rewardText.trim()) return;
+    const text = rewardText.trim();
 
-    addReward(rewardText.trim());
+    if (!text) return;
+
+    // 同じご褒美がすでにある場合は追加しない
+    if (rewards.includes(text)) {
+      window.alert('このご褒美はすでに設定されています。');
+      return;
+    }
+
+    addReward(text);
     setRewardText('');
+  };
+
+  const handleCandidateAdd = (candidate) => {
+    // 同じご褒美がすでにある場合は追加しない
+    if (rewards.includes(candidate)) {
+      window.alert('このご褒美はすでに設定されています。');
+      return;
+    }
+
+    addReward(candidate);
   };
 
   const handleDelete = (index) => {
@@ -39,6 +68,7 @@ function RewardSetting({
 
         <div className="card">
 
+          {/* ページタイトル */}
           <div className="page-head">
             <Icon name="reward" size={22} />
             <h1 className="title-page">
@@ -50,7 +80,7 @@ function RewardSetting({
             目標を達成したときのご褒美を設定します。
           </p>
 
-          {/* ご褒美一覧 */}
+          {/* 設定中のご褒美 */}
           <div className="field">
 
             <label className="field-label">
@@ -96,11 +126,45 @@ function RewardSetting({
 
           </div>
 
-          {/* 新しいご褒美 */}
+          {/* おすすめのご褒美 */}
           <div className="field spacer-top">
 
             <label className="field-label">
-              新しいご褒美
+              おすすめのご褒美
+            </label>
+
+            <div className="reward-candidates">
+
+              {rewardCandidates.map((candidate) => {
+                const isSelected =
+                  rewards.includes(candidate);
+
+                return (
+                  <button
+                    key={candidate}
+                    type="button"
+                    className="reward-candidate"
+                    onClick={() =>
+                      handleCandidateAdd(candidate)
+                    }
+                    disabled={isSelected}
+                  >
+                    {isSelected
+                      ? `✓ ${candidate}`
+                      : candidate}
+                  </button>
+                );
+              })}
+
+            </div>
+
+          </div>
+
+          {/* 自分でご褒美を追加 */}
+          <div className="field spacer-top">
+
+            <label className="field-label">
+              自分でご褒美を追加
             </label>
 
             <textarea
@@ -115,6 +179,7 @@ function RewardSetting({
 
           </div>
 
+          {/* 追加ボタン */}
           <button
             onClick={handleAdd}
             className="btn"

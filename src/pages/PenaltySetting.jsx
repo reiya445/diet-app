@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import Icon from '../assets/Icon';
 
+const penaltyCandidates = [
+  '🧹 10分掃除',
+  '📱 スマホを30分使わない',
+  '📝 明日の目標を1つ追加',
+  '🚶 10分散歩',
+  '🧺 家事を1つ行う',
+  '💰 100円貯金',
+  '📖 10分読書',
+  '✍️ 今日の行動を振り返る'
+];
+
 function PenaltySetting({
   penalties,
   addPenalty,
@@ -10,10 +21,27 @@ function PenaltySetting({
   const [penaltyText, setPenaltyText] = useState('');
 
   const handleAdd = () => {
-    if (!penaltyText.trim()) return;
+    const text = penaltyText.trim();
 
-    addPenalty(penaltyText.trim());
+    if (!text) return;
+
+    // 同じ罰ゲームがすでにある場合は追加しない
+    if (penalties.includes(text)) {
+      window.alert('この罰ゲームはすでに設定されています。');
+      return;
+    }
+
+    addPenalty(text);
     setPenaltyText('');
+  };
+
+  const handleCandidateAdd = (candidate) => {
+    if (penalties.includes(candidate)) {
+      window.alert('この罰ゲームはすでに設定されています。');
+      return;
+    }
+
+    addPenalty(candidate);
   };
 
   const handleDelete = (index) => {
@@ -39,6 +67,7 @@ function PenaltySetting({
 
         <div className="card">
 
+          {/* ページタイトル */}
           <div className="page-head">
             <Icon name="penalty" size={22} />
             <h1 className="title-page">
@@ -50,7 +79,7 @@ function PenaltySetting({
             目標を達成できなかったときの罰ゲームを設定します。
           </p>
 
-          {/* 罰ゲーム一覧 */}
+          {/* 設定中の罰ゲーム */}
           <div className="field">
 
             <label className="field-label">
@@ -78,9 +107,7 @@ function PenaltySetting({
 
                     <button
                       type="button"
-                      onClick={() =>
-                        handleDelete(index)
-                      }
+                      onClick={() => handleDelete(index)}
                       className="delete-button"
                       aria-label={`${penalty}を削除`}
                       title="削除"
@@ -96,11 +123,42 @@ function PenaltySetting({
 
           </div>
 
+          {/* おすすめの罰ゲーム */}
+          <div className="field spacer-top">
+
+            <label className="field-label">
+              おすすめの罰ゲーム
+            </label>
+
+            <div className="penalty-candidates">
+
+              {penaltyCandidates.map((candidate) => {
+                const isSelected = penalties.includes(candidate);
+
+                return (
+                  <button
+                    key={candidate}
+                    type="button"
+                    className="penalty-candidate"
+                    onClick={() => handleCandidateAdd(candidate)}
+                    disabled={isSelected}
+                  >
+                    {isSelected
+                      ? `✓ ${candidate}`
+                      : candidate}
+                  </button>
+                );
+              })}
+
+            </div>
+
+          </div>
+
           {/* 新しい罰ゲーム */}
           <div className="field spacer-top">
 
             <label className="field-label">
-              新しい罰ゲーム
+              自分で罰ゲームを追加
             </label>
 
             <textarea
@@ -115,6 +173,7 @@ function PenaltySetting({
 
           </div>
 
+          {/* 追加ボタン */}
           <button
             onClick={handleAdd}
             className="btn"
