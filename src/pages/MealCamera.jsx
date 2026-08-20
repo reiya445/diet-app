@@ -51,7 +51,7 @@ function MealCamera({ onBack, onNext }) {
 
       const response = await fetch(
 
-        "http://localhost:5010/analyze",
+        "https://diet-api-4u60.onrender.com/analyze",
 
         {
 
